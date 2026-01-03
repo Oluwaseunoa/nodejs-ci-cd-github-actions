@@ -9,23 +9,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout source code
+      uses: actions/checkout@v4
 
-    - name: Setup SSH
-      uses: webfactory/ssh-agent@v0.5.4
+    - name: Setup SSH Agent
+      uses: webfactory/ssh-agent@v0.9.0
       with:
         ssh-private-key: ${{ secrets.EC2_KEY }}
 
-    - name: Deploy to EC2
+    - name: Deploy to EC2 Server
       run: |
         ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          if [ ! -d "nodejs-ci-cd" ]; then
-            git clone https://github.com/<your-username>/nodejs-ci-cd-github-actions.git nodejs-ci-cd
+          set -e
+
+          APP_DIR="$HOME/nodejs-ci-cd-github-actions"
+
+          if [ ! -d "$APP_DIR" ]; then
+            git clone https://github.com/Oluwaseunoa/nodejs-ci-cd-github-actions.git "$APP_DIR"
           fi
-          cd nodejs-ci-cd
+
+          cd "$APP_DIR"
+
           git pull origin main
-          npm install
-          pm2 delete nodejs-app || true
-          pm2 start index.js --name nodejs-app
+          npm ci
+
+          if pm2 describe nodejs-app > /dev/null; then
+            pm2 reload nodejs-app
+          else
+            pm2 start index.js --name nodejs-app
+          fi
+
+          pm2 save
         EOF
