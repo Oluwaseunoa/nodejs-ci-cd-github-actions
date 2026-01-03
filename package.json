@@ -1,0 +1,24 @@
+{
+  "name": "nodejs-ci-cd-github-actions",
+  "version": "1.0.0",
+  "description": "This is a NodeJS project that demonstrate ci-cd pipeline using github actions",
+  "homepage": "https://github.com/Oluwaseunoa/nodejs-ci-cd-github-actions#readme",
+  "bugs": {
+    "url": "https://github.com/Oluwaseunoa/nodejs-ci-cd-github-actions/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Oluwaseunoa/nodejs-ci-cd-github-actions.git"
+  },
+  "license": "ISC",
+  "author": "Oluwaseun Osunsola",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
